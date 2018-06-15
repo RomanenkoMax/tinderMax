@@ -4,9 +4,9 @@ import ua.danit.model.User;
 
 import java.util.HashMap;
 
-public class DataBase {
+public class DataBaseUser {
 
-    public HashMap<Integer, User> getFromBase() {
+    public HashMap<Integer, User> getBaseUser() {
         return new HashMap<Integer, User>(){{
             put(1, new User("Monica", "https://images.pexels.com/photos/160699/girl-dandelion-yellow-flowers-160699.jpeg?auto=compress&cs=tinysrgb&h=350", 1));
             put(2, new User("Jessy", "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&h=350", 2));

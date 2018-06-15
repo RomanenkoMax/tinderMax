@@ -3,6 +3,7 @@ package ua.danit.model;
 public class User {
     private String name;
     private  String photo;
+    private Integer id;
 
     public User(String name, String photo, Integer id) {
         this.name = name;
@@ -10,7 +11,7 @@ public class User {
         this.id = id;
     }
 
-    private Integer id;
+
 
     public String getName() {
         return name;
