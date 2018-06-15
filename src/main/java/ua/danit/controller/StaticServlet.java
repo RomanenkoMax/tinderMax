@@ -11,10 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+
 public class StaticServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String url = "src/main/resources/css" + req.getPathInfo();
+        String url = "lib/style/css" + req.getPathInfo();
         URL file = getClass().getClassLoader().getResource(url);
         InputStream in = file.openStream();
         ServletOutputStream out = resp.getOutputStream();
