@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class UserDAO {
 
-    HashMap<Integer, User> base = new DataBaseUser().getBaseUser();
-    int id = base.size();
+    public HashMap<Integer, User> base = new DataBaseUser().getBaseUser();
+    public int id = base.size();
 
     public void save(User user) {
         base.put(++id, user);
