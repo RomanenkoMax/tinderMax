@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import ua.danit.dao.LikedDAO;
 import ua.danit.dao.UserDAO;
 import ua.danit.model.Liked;
+import ua.danit.utils.DataBaseLiked;
 import ua.danit.utils.DataBaseUser;
 
 
@@ -19,11 +20,13 @@ public class UserServlet extends HttpServlet {
 
 
     private Integer id;
-    UserDAO userDAO = new UserDAO();
-    LikedDAO likedDAO = new LikedDAO();
+    UserDAO userDAO;
+    LikedDAO likedDAO;
 
-    public UserServlet(Integer next) {
-        this.id = next;
+    public UserServlet(Integer id, UserDAO userDAO, LikedDAO likedDAO) {
+        this.id = id;
+        this.userDAO = userDAO;
+        this.likedDAO = likedDAO;
     }
 
     @Override
@@ -33,12 +36,15 @@ public class UserServlet extends HttpServlet {
         File file = new File("lib/html/like-page1.html");
         String outText = new FileUtils().readFileToString(file);
 
-        if (id == userDAO.id + 1){
+        if (id == userDAO.id + 1) {
+            resp.sendRedirect("/liked");
             id = 1;
+
         }
 
         outText = String.format(outText, userDAO.get(id).getName(), userDAO.get(id).getPhoto());
         writer.print(outText);
+
 
     }
 
@@ -47,14 +53,15 @@ public class UserServlet extends HttpServlet {
         String like = req.getParameter("like");
 
 
-        if (like.equals("yes")){
+        if (like.equals("yes")) {
             Liked inst = new Liked();
-            inst.setLikedId(++likedDAO.id);
+            inst.setLikedId(likedDAO.id);
             inst.setUserId(userDAO.get(id).getId());
             inst.setChatId(1);
             likedDAO.save(inst);
         }
         id++;
         doGet(req, resp);
+
     }
 }
