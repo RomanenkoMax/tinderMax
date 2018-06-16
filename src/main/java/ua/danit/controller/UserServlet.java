@@ -29,7 +29,7 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         PrintWriter writer = resp.getWriter();
-        File file = new File("lib/html/like-page1.html");
+        File file = new File("lib/html/like-page.html");
         String outText = new FileUtils().readFileToString(file);
 
         if (id == userDAO.id + 1) {
@@ -38,7 +38,7 @@ public class UserServlet extends HttpServlet {
 
         }
 
-        outText = String.format(outText, userDAO.get(id).getName(), userDAO.get(id).getPhoto());
+        outText = String.format(outText, userDAO.get(id).getPhoto(), userDAO.get(id).getName());
         writer.print(outText);
 
 
@@ -55,9 +55,13 @@ public class UserServlet extends HttpServlet {
             inst.setUserId(userDAO.get(id).getId());
             inst.setChatId(1);
             likedDAO.save(inst);
+            id++;
+            doGet(req, resp);
+        } else {
+            id++;
+            doGet(req, resp);
         }
-        id++;
-        doGet(req, resp);
+
 
     }
 }

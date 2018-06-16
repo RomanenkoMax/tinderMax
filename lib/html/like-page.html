@@ -8,12 +8,13 @@
     <link rel="icon" href="img/favicon.ico">
 
     <title>Like page</title>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/resources/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link  href="/css/style.css" rel="stylesheet">
+    <link href="/css/resources/css/style.css" rel="stylesheet">
 </head>
 <body style="background-color: #f5f5f5;">
 
@@ -22,16 +23,26 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-lg-12 col-md-12 text-center">
-                    <img src="https://robohash.org/68.186.255.198.png" alt="" class="mx-auto rounded-circle img-fluid">
-                    <h3 class="mb-0 text-truncated">User name</h3>
+                    <img src="%1s" alt="" class="mx-auto rounded-circle img-fluid">
+                    <h3 class="mb-0 text-truncated">%2s</h3>
                     <br>
                 </div>
+
                 <div class="col-12 col-lg-6">
-                    <button type="button" class="btn btn-outline-danger btn-block" name="dislike" value="no"><span class="fa fa-times"></span> Dislike</button>
+                    <form action="/user" method="post">
+                        <button class="btn btn-outline-danger btn-block" name="like" value="no"><span
+                                class="fa fa-times"></span> Dislike
+                        </button>
+                    </form>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <button class="btn btn-outline-success btn-block" name="like" value="yes"><span class="fa fa-heart"></span> Like</button>
+                    <form action="/user" method="post">
+                    <button class="btn btn-outline-success btn-block" name="like" value="yes"><span
+                            class="fa fa-heart"></span> Like
+                    </button>
+                    </form>
                 </div>
+
                 <!--/col-->
             </div>
             <!--/row-->
