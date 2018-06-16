@@ -4,10 +4,6 @@ import org.apache.commons.io.FileUtils;
 import ua.danit.dao.LikedDAO;
 import ua.danit.dao.UserDAO;
 import ua.danit.model.Liked;
-import ua.danit.utils.DataBaseLiked;
-import ua.danit.utils.DataBaseUser;
-
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
