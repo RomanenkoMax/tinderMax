@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 public class ConnectionToDB
 {
-	private static final String DB_URL = "jdbc:postgresql://localhost:5432/e_shop";
+	private static final String DB_URL = "jdbc:postgresql://localhost:5432/tinder";
 	private static final String USERNAME = "postgres";
 	private static final String USER_PASS = "Partizan1979";
 

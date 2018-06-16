@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>People list</title>
+</head>
+<body>
+<h1 align="center">Welcome to User _List!</h1>
+<table border=1 align="center">
+    <#list items as k, v>
+        <form action="/messages">
+            <tr><td><img src=${v.photo} width="20%" height="25%" ></td>
+                <td>${v.name}</td>
+                <td>${k}</td>
+                <td>Last visit 15.06.2018</td>
+                <td><input type="submit">GO TO CHAT</input></td>
+            </tr>
+        </form>
+    </#list>
+</table>
+</body>
+</html>

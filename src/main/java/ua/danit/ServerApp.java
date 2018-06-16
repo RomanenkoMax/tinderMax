@@ -31,7 +31,7 @@ public class ServerApp {
         handler.addServlet(holderUser, "/user");
         handler.addServlet(holderLiked, "/liked");
         handler.addServlet(holderStatic, "/css/*");
-        handler.addServlet(holderChat, "/messages");
+        handler.addServlet(holderChat, "/messages/*");
 
         server.setHandler(handler);
         server.start();
