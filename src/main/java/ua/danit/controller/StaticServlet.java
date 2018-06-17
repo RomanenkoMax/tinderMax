@@ -1,6 +1,8 @@
 package ua.danit.controller;
 
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
 import org.apache.commons.io.FileUtils;
 
 import javax.servlet.ServletException;
@@ -8,8 +10,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 ;
 
 
@@ -17,13 +18,25 @@ public class StaticServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String url = req.getPathInfo();
-        url = url.substring(1,url.length());
-        String out = FileUtils.readFileToString(new File(url),"UTF-8");
-        byte[] buffer = out.getBytes();
-        ServletOutputStream outputStream = resp.getOutputStream();
-        outputStream.write(buffer);
-        outputStream.close();
+
+        String path = req.getPathInfo();
+        System.out.println(path);
+        path = path.substring(1, path.length());
+//        InputStream inputStream = FileUtils.openInputStream(new File(path));
+//        ServletOutputStream outputStream = resp.getOutputStream();
+//        ByteStreams.copy(inputStream, outputStream);
+        CharStreams.copy(new BufferedReader(new FileReader(path)), resp.getWriter());
+//        inputStream.close();
+//        outputStream.close();
+
+
+//        String url = req.getPathInfo();
+//        url = url.substring(1,url.length());
+//       String out = FileUtils.readFileToString(new File(url),"UTF-8");
+//        byte[] buffer = out.getBytes();
+//        ServletOutputStream outputStream = resp.getOutputStream();
+//        outputStream.write(buffer);
+//        outputStream.close();
 
 //        String url = req.getPathInfo();
 //        if (url!=null) {

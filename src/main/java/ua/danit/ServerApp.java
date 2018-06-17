@@ -9,7 +9,9 @@ import ua.danit.controller.StaticServlet;
 import ua.danit.controller.UserServlet;
 import ua.danit.dao.LikedDAO;
 import ua.danit.dao.UserDAO;
+import ua.danit.dao.UserDAOtoDB;
 import ua.danit.model.Liked;
+import ua.danit.model.User;
 import ua.danit.utils.DataBaseLiked;
 
 import java.util.HashMap;
@@ -19,10 +21,12 @@ public class ServerApp {
 
         LikedDAO likedDAO = new LikedDAO();
         UserDAO userDAO = new UserDAO();
+        UserDAOtoDB userDAOtoDB = new UserDAOtoDB();
+
 
         Server server = new Server(8002);
         ServletContextHandler handler = new ServletContextHandler();
-        ServletHolder holderUser = new ServletHolder(new UserServlet(1, userDAO, likedDAO));
+        ServletHolder holderUser = new ServletHolder(new UserServlet(userDAOtoDB));
         ServletHolder holderLiked = new ServletHolder(new LikedServlet(userDAO, likedDAO));
         ServletHolder holderStatic = new ServletHolder(new StaticServlet());
         ServletHolder holderChat = new ServletHolder(new ChatServlet());
@@ -31,7 +35,7 @@ public class ServerApp {
         handler.addServlet(holderUser, "/user");
         handler.addServlet(holderLiked, "/liked");
         handler.addServlet(holderStatic, "/css/*");
-        handler.addServlet(holderChat, "/messages/*");
+        handler.addServlet(holderChat, "/messages");
 
         server.setHandler(handler);
         server.start();

@@ -1,17 +1,46 @@
 package ua.danit.model;
 
+import java.util.UUID;
+
 public class User {
     private String name;
     private  String photo;
     private Integer id;
+    private String login;
+    private String password;
 
-    public User(String name, String photo, Integer id) {
+    public User(String name, String photo, String login, String password) {
         this.name = name;
         this.photo = photo;
-        this.id = id;
+        this.id = genereateId();
+        this.login = login;
+        this.password = password;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id){
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -29,11 +58,11 @@ public class User {
         this.photo = photo;
     }
 
-    public Integer getId() {
-        return id;
+    private Integer genereateId() {
+        UUID uniqueID = UUID.randomUUID();
+        String s = uniqueID.toString().replaceAll("[^0-9]", "");
+        return Integer.parseInt(s.substring(0, 8));
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+
 }

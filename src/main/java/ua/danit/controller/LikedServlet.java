@@ -48,7 +48,7 @@ public class LikedServlet extends HttpServlet{
 
         model.put("items", userHashMap);
 
-        Template template = cfg.getTemplate("people-list-1.html");
+        Template template = cfg.getTemplate("people-list.html");
         Writer out = resp.getWriter();
 
         try {
