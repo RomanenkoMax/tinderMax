@@ -4,20 +4,18 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.io.FileUtils;
-import ua.danit.dao.LikedDAO;
-import ua.danit.dao.UserDAO;
+import ua.danit.dao.ChatDAOtoDB;
+import ua.danit.dao.LikedDAOtoDB;
 import ua.danit.dao.UserDAOtoDB;
+import ua.danit.model.Chat;
 import ua.danit.model.Liked;
 import ua.danit.model.User;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,20 +24,23 @@ import java.util.Map;
 
 public class UserServlet extends HttpServlet {
 
-    UserDAOtoDB userDAOtoDB;
-    List<User> users;
-    Iterator<User> iterator;
+    private Iterator<User> iterator;
+    private LikedDAOtoDB likedDAOtoDB;
+    private UserDAOtoDB userDAOtoDB;
+    private ChatDAOtoDB chatDAOtoDB;
 
-    public UserServlet(UserDAOtoDB userDAOtoDB) {
+    public UserServlet(UserDAOtoDB userDAOtoDB, LikedDAOtoDB likedDAOtoDB, ChatDAOtoDB chatDAOtoDB) {
+        this.likedDAOtoDB = likedDAOtoDB;
         this.userDAOtoDB = userDAOtoDB;
-        users = userDAOtoDB.getAll();
+        this.chatDAOtoDB = chatDAOtoDB;
+        List<User> users = userDAOtoDB.getAll();
         iterator = users.listIterator();
     }
 
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
         cfg.setDirectoryForTemplateLoading(new File("./lib/html"));
@@ -52,8 +53,16 @@ public class UserServlet extends HttpServlet {
 
         if (iterator.hasNext()){
             User user = iterator.next();
+            if (user.getLogin().equals("max") && iterator.hasNext()){
+                user = iterator.next();
+            } else if (!iterator.hasNext()){
+                resp.sendRedirect("/liked");
+            }
             model.put("name", user.getName());
             model.put("photo", user.getPhoto());
+            model.put("login", user.getLogin());
+            model.put("myLogin", "max");
+
 
             Template template = cfg.getTemplate("like-page.html");
             Writer out = resp.getWriter();
@@ -78,7 +87,18 @@ public class UserServlet extends HttpServlet {
 
 
         if (like.equals("yes")) {
-//
+
+            String login = req.getParameter("login");
+            String myLogin = req.getParameter("myLogin");
+
+            User user = userDAOtoDB.get(login);
+            Chat chat = new Chat();
+            chatDAOtoDB.put(chat);
+
+            Liked liked = new Liked(user.getId(), chat.getChatId(), myLogin);
+
+            likedDAOtoDB.put(liked);
+
             doGet(req, resp);
         } else {
             doGet(req, resp);

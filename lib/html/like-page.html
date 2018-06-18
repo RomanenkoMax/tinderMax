@@ -30,15 +30,20 @@
 
                 <div class="col-12 col-lg-6">
                     <form action="/user" method="post">
+                        <input type="hidden" name="login" value="${login}">
+                        <input type="hidden" name="myLogin" value="${myLogin}">
                         <button class="btn btn-outline-danger btn-block" name="like" value="no"><span
                                 class="fa fa-times"></span> Dislike
                         </button>
+
                     </form>
                 </div>
                 <div class="col-12 col-lg-6">
                     <form action="/user" method="post">
-                    <button class="btn btn-outline-success btn-block" name="like" value="yes"><span
-                            class="fa fa-heart"></span> Like
+                        <input type="hidden" name="login" value="${login}">
+                        <input type="hidden" name="myLogin" value="${myLogin}">
+                        <button class="btn btn-outline-success btn-block" name="like" value="yes"><span
+                                class="fa fa-heart"></span> Like
                     </button>
                     </form>
                 </div>

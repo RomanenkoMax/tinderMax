@@ -7,9 +7,7 @@ import ua.danit.controller.ChatServlet;
 import ua.danit.controller.LikedServlet;
 import ua.danit.controller.StaticServlet;
 import ua.danit.controller.UserServlet;
-import ua.danit.dao.LikedDAO;
-import ua.danit.dao.UserDAO;
-import ua.danit.dao.UserDAOtoDB;
+import ua.danit.dao.*;
 import ua.danit.model.Liked;
 import ua.danit.model.User;
 import ua.danit.utils.DataBaseLiked;
@@ -22,11 +20,13 @@ public class ServerApp {
         LikedDAO likedDAO = new LikedDAO();
         UserDAO userDAO = new UserDAO();
         UserDAOtoDB userDAOtoDB = new UserDAOtoDB();
+        LikedDAOtoDB likedDAOtoDB = new LikedDAOtoDB();
+        ChatDAOtoDB chatDAOtoDB = new ChatDAOtoDB();
 
 
         Server server = new Server(8002);
         ServletContextHandler handler = new ServletContextHandler();
-        ServletHolder holderUser = new ServletHolder(new UserServlet(userDAOtoDB));
+        ServletHolder holderUser = new ServletHolder(new UserServlet(userDAOtoDB, likedDAOtoDB, chatDAOtoDB));
         ServletHolder holderLiked = new ServletHolder(new LikedServlet(userDAO, likedDAO));
         ServletHolder holderStatic = new ServletHolder(new StaticServlet());
         ServletHolder holderChat = new ServletHolder(new ChatServlet());

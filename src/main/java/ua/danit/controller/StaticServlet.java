@@ -20,7 +20,6 @@ public class StaticServlet extends HttpServlet {
 
 
         String path = req.getPathInfo();
-        System.out.println(path);
         path = path.substring(1, path.length());
 //        InputStream inputStream = FileUtils.openInputStream(new File(path));
 //        ServletOutputStream outputStream = resp.getOutputStream();

@@ -4,32 +4,32 @@ import java.util.UUID;
 
 public class Liked {
 
-    Integer likedId;
+    Integer id;
     Integer userId;
     Integer chatId;
-    String likedLogin;
+    String likeLogin;
 
-    public Liked(Integer userId, Integer chatId, String likedLogin) {
+    public Liked(Integer userId, Integer chatId, String likeLogin) {
         this.userId = userId;
         this.chatId = chatId;
-        this.likedLogin = likedLogin;
-        this.likedId = genereateLikedId();
+        this.likeLogin = likeLogin;
+        this.id = generateLikedId();
     }
 
-    public String getLikedLogin() {
-        return likedLogin;
+    public String getLikeLogin() {
+        return likeLogin;
     }
 
-    public void setLikedLogin(String likedLogin) {
-        this.likedLogin = likedLogin;
+    public void setLikeLogin(String likeLogin) {
+        this.likeLogin = likeLogin;
     }
 
-    public Integer getLikedId() {
-        return likedId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLikedId(Integer likedId) {
-        this.likedId = likedId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getUserId() {
@@ -48,7 +48,7 @@ public class Liked {
         this.chatId = chatId;
     }
 
-    private Integer genereateLikedId() {
+    private Integer generateLikedId() {
         UUID uniqueID = UUID.randomUUID();
         String s = uniqueID.toString().replaceAll("[^0-9]", "");
         return Integer.parseInt(s.substring(0, 8));
