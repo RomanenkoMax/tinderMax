@@ -123,4 +123,34 @@ public class UserDAOtoDB extends AbstractDAOtoDB<User> {
         }
         return users;
     }
+
+    public User getById(Object id) {
+
+
+        String sql = "SELECT DISTINCT * FROM public.user WHERE id='" + id + "'";
+
+        try (
+                Connection connection = ConnectionToDB.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet rSet = statement.executeQuery()
+        ) {
+            while (rSet.next()) {
+
+                String password = rSet.getString("password");
+                String name = rSet.getString("name");
+                String photo = rSet.getString("photo");
+                String login = rSet.getString("login");
+
+                User user = new User(name, photo, login, password);
+                user.setId((Integer) id);
+
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

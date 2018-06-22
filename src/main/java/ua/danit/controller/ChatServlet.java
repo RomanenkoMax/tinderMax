@@ -15,6 +15,8 @@ public class ChatServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String url = req.getPathInfo();
+        System.out.println(url);
         PrintWriter writer = resp.getWriter();
         File file = new File("lib/html/chat.html");
         String outText = new FileUtils().readFileToString(file);

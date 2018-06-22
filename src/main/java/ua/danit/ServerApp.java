@@ -17,25 +17,22 @@ import java.util.HashMap;
 public class ServerApp {
     public static void main(String[] args) throws Exception {
 
-        LikedDAO likedDAO = new LikedDAO();
-        UserDAO userDAO = new UserDAO();
         UserDAOtoDB userDAOtoDB = new UserDAOtoDB();
         LikedDAOtoDB likedDAOtoDB = new LikedDAOtoDB();
         ChatDAOtoDB chatDAOtoDB = new ChatDAOtoDB();
 
-
         Server server = new Server(8002);
         ServletContextHandler handler = new ServletContextHandler();
         ServletHolder holderUser = new ServletHolder(new UserServlet(userDAOtoDB, likedDAOtoDB, chatDAOtoDB));
-        ServletHolder holderLiked = new ServletHolder(new LikedServlet(userDAO, likedDAO));
-        ServletHolder holderStatic = new ServletHolder(new StaticServlet());
+        ServletHolder holderLiked = new ServletHolder(new LikedServlet(userDAOtoDB, likedDAOtoDB, chatDAOtoDB));
         ServletHolder holderChat = new ServletHolder(new ChatServlet());
+        ServletHolder holderStatic = new ServletHolder(new StaticServlet());
 
 
         handler.addServlet(holderUser, "/user");
         handler.addServlet(holderLiked, "/liked");
+        handler.addServlet(holderChat, "/messages/*");
         handler.addServlet(holderStatic, "/css/*");
-        handler.addServlet(holderChat, "/messages");
 
         server.setHandler(handler);
         server.start();

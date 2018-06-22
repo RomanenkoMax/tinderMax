@@ -1,32 +1,42 @@
 package ua.danit.controller;
 
 
-import com.google.common.io.ByteStreams;
-import com.google.common.io.CharStreams;
-import org.apache.commons.io.FileUtils;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 
 public class StaticServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String url = req.getPathInfo();
+        if (url!=null) {
+            Path in = Paths.get("resources/css", url);
+            Files.copy(in, resp.getOutputStream());
+        } else {
+            resp.getWriter().print("you should pass the file name after slash");
+        }
+// set the type for downloading ability instead of plain show in the browser window.
+//            resp.setContentType("application/octet-stream");
+//            resp.setHeader("Content-Disposition",String.format("attachment; filename=\"%s\"", in.getFileName().toString()));
+        // move content from the FileInputStream to ServletOutputStream
 
-        String path = req.getPathInfo();
-        path = path.substring(1, path.length());
-//        InputStream inputStream = FileUtils.openInputStream(new File(path));
-//        ServletOutputStream outputStream = resp.getOutputStream();
-//        ByteStreams.copy(inputStream, outputStream);
-        CharStreams.copy(new BufferedReader(new FileReader(path)), resp.getWriter());
-//        inputStream.close();
-//        outputStream.close();
+
+//        path = path.substring(1, path.length());
+////        InputStream inputStream = FileUtils.openInputStream(new File(path));
+////        ServletOutputStream outputStream = resp.getOutputStream();
+////        ByteStreams.copy(inputStream, outputStream);
+//        CharStreams.copy(new BufferedReader(new FileReader(path)), resp.getWriter());
+////        inputStream.close();
+////        outputStream.close();
 
 
 //        String url = req.getPathInfo();

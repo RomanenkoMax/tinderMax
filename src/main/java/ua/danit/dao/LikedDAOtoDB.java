@@ -1,10 +1,13 @@
 package ua.danit.dao;
 
+
 import ua.danit.model.Liked;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
 
@@ -94,5 +97,32 @@ public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
             e.printStackTrace();
         }
 
+    }
+
+    public List<Integer> getAllByLogin(String login) {
+
+        List<Integer> likeds = new ArrayList<>();
+
+
+        String sql = "SELECT DISTINCT userid FROM public.liked WHERE likelogin='" + login + "'";
+
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rSet = statement.executeQuery()) {
+            while (rSet.next()) {
+
+//                Integer id = rSet.getInt("id");
+                Integer userId = rSet.getInt("userid");
+//                Integer chatId = rSet.getInt("chatid");
+//                String likeLogin = rSet.getString("likelogin");
+
+//                Liked liked = new Liked(userId, chatId, likeLogin);
+//                liked.setId(id);
+                likeds.add(userId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return likeds;
     }
 }

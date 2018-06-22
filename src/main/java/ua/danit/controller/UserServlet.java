@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,7 +57,8 @@ public class UserServlet extends HttpServlet {
             if (user.getLogin().equals("max") && iterator.hasNext()){
                 user = iterator.next();
             } else if (!iterator.hasNext()){
-                resp.sendRedirect("/liked");
+
+                resp.sendRedirect("/liked?login=max");
             }
             model.put("name", user.getName());
             model.put("photo", user.getPhoto());
@@ -65,6 +67,7 @@ public class UserServlet extends HttpServlet {
 
 
             Template template = cfg.getTemplate("like-page.html");
+            resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
             Writer out = resp.getWriter();
 
             try {
@@ -76,7 +79,8 @@ public class UserServlet extends HttpServlet {
             }
 
         } else {
-            resp.sendRedirect("/liked");
+            req.setAttribute("login", "max");
+            resp.sendRedirect("/liked?login=max");
         }
 
     }
