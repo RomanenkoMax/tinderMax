@@ -5,8 +5,8 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import ua.danit.dao.*;
-import ua.danit.model.Liked;
 import ua.danit.model.User;
+import ua.danit.utils.TemplateConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +20,9 @@ import java.util.*;
 
 public class LikedServlet extends HttpServlet {
 
-    UserDAOtoDB userDAOtoDB;
-    LikedDAOtoDB likedDAOtoDB;
-    ChatDAOtoDB chatDAOtoDB;
+    private UserDAOtoDB userDAOtoDB;
+    private LikedDAOtoDB likedDAOtoDB;
+    private ChatDAOtoDB chatDAOtoDB;
 
 
     public LikedServlet(UserDAOtoDB userDAOtoDB, LikedDAOtoDB likedDAOtoDB, ChatDAOtoDB chatDAOtoDB) {
@@ -35,28 +35,21 @@ public class LikedServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
-        cfg.setDirectoryForTemplateLoading(new File("./lib/html"));
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        cfg.setLogTemplateExceptions(false);
-        cfg.setWrapUncheckedExceptions(true);
-
         String login = req.getParameter("login");
-        List<Integer> likeds = likedDAOtoDB.getAllByLogin(login);
-        List<User> users = new ArrayList<>();
+        List<Integer> likeds = likedDAOtoDB.getAllUserIdByLogin(login);
+        HashMap<Integer, User> users = new HashMap<>();
 
         for (Integer liked : likeds) {
-            users.add(userDAOtoDB.getById(liked));
+            users.put(likedDAOtoDB.getChatIdByUserId(userDAOtoDB.getById(liked).getId()), userDAOtoDB.getById(liked));
         }
-
 
         Map<String, Object> model = new HashMap<>();
 
-
         model.put("users", users);
+
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        Template template = cfg.getTemplate("people-list.html");
+
+        Template template = new TemplateConfig().getConfig("people-list.html");
 
         Writer out = resp.getWriter();
 

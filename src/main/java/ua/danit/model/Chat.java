@@ -6,14 +6,16 @@ public class Chat {
 
     private Integer chatId;
     private Long time;
-    String messageIn;
-    String messageOut;
+    private String message;
+    private String toLogin;
+    private String fromLogin;
 
-    public Chat() {
-        chatId = generateChatId();
-        time = System.currentTimeMillis();
-        messageOut = "Hi, how are you";
-        messageIn = "Hi, bebe";
+    public Chat(String toLogin, String fromLogin) {
+        this.chatId = generateChatId();
+        this.time = System.currentTimeMillis();
+        this.message = "hi bebe, nice to speak with you";
+        this.toLogin = toLogin;
+        this.fromLogin = fromLogin;
     }
 
     public Integer getChatId() {
@@ -32,20 +34,28 @@ public class Chat {
         this.time = time;
     }
 
-    public String getMessageIn() {
-        return messageIn;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMessageIn(String messageIn) {
-        this.messageIn = messageIn;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getMessageOut() {
-        return messageOut;
+    public String getToLogin() {
+        return toLogin;
     }
 
-    public void setMessageOut(String messageOut) {
-        this.messageOut = messageOut;
+    public void setToLogin(String toLogin) {
+        this.toLogin = toLogin;
+    }
+
+    public String getFromLogin() {
+        return fromLogin;
+    }
+
+    public void setFromLogin(String fromLogin) {
+        this.fromLogin = fromLogin;
     }
 
     private Integer generateChatId() {

@@ -25,7 +25,7 @@ public class ServerApp {
         ServletContextHandler handler = new ServletContextHandler();
         ServletHolder holderUser = new ServletHolder(new UserServlet(userDAOtoDB, likedDAOtoDB, chatDAOtoDB));
         ServletHolder holderLiked = new ServletHolder(new LikedServlet(userDAOtoDB, likedDAOtoDB, chatDAOtoDB));
-        ServletHolder holderChat = new ServletHolder(new ChatServlet());
+        ServletHolder holderChat = new ServletHolder(new ChatServlet(userDAOtoDB, likedDAOtoDB, chatDAOtoDB));
         ServletHolder holderStatic = new ServletHolder(new StaticServlet());
 
 

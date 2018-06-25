@@ -10,6 +10,8 @@ import ua.danit.dao.UserDAOtoDB;
 import ua.danit.model.Chat;
 import ua.danit.model.Liked;
 import ua.danit.model.User;
+import ua.danit.utils.TemplateConfig;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,14 +45,6 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
-        cfg.setDirectoryForTemplateLoading(new File("./lib/html"));
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        cfg.setLogTemplateExceptions(false);
-        cfg.setWrapUncheckedExceptions(true);
-
-        Map<String, Object> model = new HashMap<>();
 
         if (iterator.hasNext()){
             User user = iterator.next();
@@ -60,13 +54,15 @@ public class UserServlet extends HttpServlet {
 
                 resp.sendRedirect("/liked?login=max");
             }
+
+            Map<String, Object> model = new HashMap<>();
             model.put("name", user.getName());
             model.put("photo", user.getPhoto());
             model.put("login", user.getLogin());
             model.put("myLogin", "max");
 
 
-            Template template = cfg.getTemplate("like-page.html");
+            Template template = new TemplateConfig().getConfig("like-page.html");
             resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
             Writer out = resp.getWriter();
 
@@ -79,7 +75,7 @@ public class UserServlet extends HttpServlet {
             }
 
         } else {
-            req.setAttribute("login", "max");
+
             resp.sendRedirect("/liked?login=max");
         }
 
@@ -95,17 +91,25 @@ public class UserServlet extends HttpServlet {
             String login = req.getParameter("login");
             String myLogin = req.getParameter("myLogin");
 
+            List<Integer> alreadyLikedIdList = likedDAOtoDB.getAllUserIdByLogin(myLogin);
             User user = userDAOtoDB.get(login);
-            Chat chat = new Chat();
-            chatDAOtoDB.put(chat);
+            Integer userId = user.getId();
 
-            Liked liked = new Liked(user.getId(), chat.getChatId(), myLogin);
+            if (!alreadyLikedIdList.contains(userId)){
 
-            likedDAOtoDB.put(liked);
+                Chat chat = new Chat(login, myLogin);
+                chatDAOtoDB.put(chat);
+
+                Liked liked = new Liked(user.getId(), chat.getChatId(), myLogin);
+                likedDAOtoDB.put(liked);
+            }
 
             doGet(req, resp);
+
         } else {
+
             doGet(req, resp);
+
         }
 
 

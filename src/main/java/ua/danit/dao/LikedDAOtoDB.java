@@ -15,7 +15,7 @@ public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
     @Override
     public void put(Liked liked) {
 
-        String sql = "INSERT INTO public.liked(id, userId, chatId, likeLogin) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO public.liked(id, userid, chatid, likelogin) VALUES(?,?,?,?)";
 
         try (Connection connection = ConnectionToDB.getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, liked.getId());
@@ -32,7 +32,7 @@ public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
     @Override
     public void update(Liked liked) {
 
-        String sql = "UPDATE public.liked SET likeLogin=?, userId=?, chatId=?, WHERE id=?";
+        String sql = "UPDATE public.liked SET likelogin=?, userid=?, chatid=?, WHERE id=?";
 
         try (
                 Connection connection = ConnectionToDB.getConnection();
@@ -65,9 +65,9 @@ public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
         {
             while ( rSet.next() )
             {
-                Integer userid = rSet.getInt("userId");
-                Integer chatId = rSet.getInt("chatId");
-                String likeLogin = rSet.getString("likeLogin");
+                Integer userid = rSet.getInt("userid");
+                Integer chatId = rSet.getInt("chatid");
+                String likeLogin = rSet.getString("likelogin");
 
                 Liked liked = new Liked(userid, chatId, likeLogin);
                 liked.setId((Integer) id);
@@ -99,25 +99,20 @@ public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
 
     }
 
-    public List<Integer> getAllByLogin(String login) {
+    public List<Integer> getAllUserIdByLogin(String login) {
 
         List<Integer> likeds = new ArrayList<>();
 
 
-        String sql = "SELECT DISTINCT userid FROM public.liked WHERE likelogin='" + login + "'";
+        String sql = "SELECT userid FROM public.liked WHERE likelogin='" + login + "'";
 
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet rSet = statement.executeQuery()) {
             while (rSet.next()) {
 
-//                Integer id = rSet.getInt("id");
                 Integer userId = rSet.getInt("userid");
-//                Integer chatId = rSet.getInt("chatid");
-//                String likeLogin = rSet.getString("likelogin");
 
-//                Liked liked = new Liked(userId, chatId, likeLogin);
-//                liked.setId(id);
                 likeds.add(userId);
             }
         } catch (SQLException e) {
@@ -125,4 +120,27 @@ public class LikedDAOtoDB extends AbstractDAOtoDB<Liked> {
         }
         return likeds;
     }
+
+    public Integer getChatIdByUserId(Integer userId) {
+
+        Integer chatId;
+
+
+        String sql = "SELECT chatid FROM public.liked WHERE userid='" + userId + "'";
+
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rSet = statement.executeQuery()) {
+            while (rSet.next()) {
+
+                chatId = rSet.getInt("chatid");
+                return chatId;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
 }
