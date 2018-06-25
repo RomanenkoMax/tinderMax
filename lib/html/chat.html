@@ -65,9 +65,9 @@
                         </li>
                         <li class="send-msg float-right mb-2">
                             <p class="pt-1 pb-1 pl-2 pr-2 m-0 rounded">
-                                nice <br>
-                                Are you fine ?
+                                ${mes3} <br>
                             </p>
+                            <span class="receive-msg-time">${date2}</span>
                         </li>
                         <li class="receive-msg float-left mb-2">
                             <div class="sender-img">
@@ -108,7 +108,7 @@
                         </li>
                         <li class="send-msg float-right mb-2">
                             <p class="pt-1 pb-1 pl-2 pr-2 m-0 rounded">
-                                Byy
+                                ${mes2}
                             </p>
                             <span class="send-msg-time">1 min</span>
                         </li>
@@ -119,9 +119,11 @@
                         <div class="col-md-2 options-left">
                             <i class="fa fa-smile-o"></i>
                         </div>
-                        <form action="/messages" method="post">
+                        <form action="/messages/${chatId}" method="post">
                         <div class="col-md-7 pl-0">
                             <input type="text" name="message" class="border-0" placeholder=" Send message" />
+                            <input type="hidden" name="loginTo" value="${loginTo}">
+                            <input type="hidden" name="loginFrom" value="${loginFrom}">
                             <button class="btn btn-block" name="send"> Send </button>
                         </div>
                         </form>

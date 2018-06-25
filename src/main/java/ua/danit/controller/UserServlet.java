@@ -10,9 +10,11 @@ import ua.danit.dao.UserDAOtoDB;
 import ua.danit.model.Chat;
 import ua.danit.model.Liked;
 import ua.danit.model.User;
+import ua.danit.utils.GetLoginFromCookie;
 import ua.danit.utils.TemplateConfig;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,20 +48,23 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 
+        Cookie[] cookies = req.getCookies();
+        String userLogin = new GetLoginFromCookie().getLogin(cookies, "login");
+
         if (iterator.hasNext()){
             User user = iterator.next();
-            if (user.getLogin().equals("max") && iterator.hasNext()){
+            if (user.getLogin().equals(userLogin) && iterator.hasNext()){
                 user = iterator.next();
             } else if (!iterator.hasNext()){
 
-                resp.sendRedirect("/liked?login=max");
+                resp.sendRedirect("/liked?login=" + userLogin);
             }
 
             Map<String, Object> model = new HashMap<>();
             model.put("name", user.getName());
             model.put("photo", user.getPhoto());
             model.put("login", user.getLogin());
-            model.put("myLogin", "max");
+            model.put("myLogin", userLogin);
 
 
             Template template = new TemplateConfig().getConfig("like-page.html");
@@ -76,7 +81,7 @@ public class UserServlet extends HttpServlet {
 
         } else {
 
-            resp.sendRedirect("/liked?login=max");
+            resp.sendRedirect("/liked?login=" + userLogin);
         }
 
     }

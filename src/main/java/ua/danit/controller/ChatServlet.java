@@ -97,6 +97,15 @@ public class ChatServlet extends HttpServlet {
 
         model.put("mes2", messageFrom.get(0));
         model.put("date1", beautyTime(chat.getTime()));
+        model.put("chatId", chatId);
+        model.put("loginTo", chat.getToLogin());
+        model.put("loginFrom", chat.getFromLogin());
+        if (messageFrom.size() > 1){
+            model.put("mes3", messageFrom.get(1));
+            model.put("date2", beautyTime(chat.getTime()));
+        } else {
+            model.put("mes3", "Hi!");
+        }
 
 
         Template template = new TemplateConfig().getConfig("chat.html");
@@ -118,7 +127,19 @@ public class ChatServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String message = req.getParameter("message");
+        String loginTo = req.getParameter("loginTo");
+        String loginFrom = req.getParameter("loginFrom");
 
 
+        Chat chat = new Chat(loginTo, loginFrom);
+        chat.setMessage(message);
+
+        chatDAOtoDB.put(chat);
+
+        Liked liked = new Liked(userDAOtoDB.get(loginTo).getId(), chat.getChatId(), loginFrom);
+
+        likedDAOtoDB.put(liked);
+
+        doGet(req, resp);
     }
 }

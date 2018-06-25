@@ -1,18 +1,17 @@
 package ua.danit.controller;
 
-import freemarker.template.Configuration;
+
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
 import ua.danit.dao.*;
 import ua.danit.model.User;
+import ua.danit.utils.GetLoginFromCookie;
 import ua.danit.utils.TemplateConfig;
-
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -35,7 +34,8 @@ public class LikedServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String login = req.getParameter("login");
+        Cookie[] cookies = req.getCookies();
+        String login = new GetLoginFromCookie().getLogin(cookies, "login");
         List<Integer> likeds = likedDAOtoDB.getAllUserIdByLogin(login);
         HashMap<Integer, User> users = new HashMap<>();
 
