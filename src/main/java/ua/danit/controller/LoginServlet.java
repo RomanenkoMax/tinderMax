@@ -43,8 +43,6 @@ public class LoginServlet extends HttpServlet {
     }
 
 
-
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -53,10 +51,13 @@ public class LoginServlet extends HttpServlet {
 
         User user = userDAOtoDB.get(userLogin);
 
-        if (user.getPassword().equals(userPass) && userDAOtoDB.get(userLogin) != null){
-            Cookie cookie = new Cookie("login", userLogin);
-            cookie.setMaxAge(120);
-            resp.addCookie(cookie);
+        if (user != null) {
+
+            if (user.getPassword().equals(userPass)) {
+                Cookie cookie = new Cookie("login", userLogin);
+                cookie.setMaxAge(120);
+                resp.addCookie(cookie);
+            }
         }
 
         resp.sendRedirect("/user");
