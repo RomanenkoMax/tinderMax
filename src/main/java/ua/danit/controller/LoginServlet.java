@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 
         User user = userDAOtoDB.get(userLogin);
 
-        if (user.getPassword().equals(userPass)){
+        if (user.getPassword().equals(userPass) && userDAOtoDB.get(userLogin) != null){
             Cookie cookie = new Cookie("login", userLogin);
             cookie.setMaxAge(120);
             resp.addCookie(cookie);

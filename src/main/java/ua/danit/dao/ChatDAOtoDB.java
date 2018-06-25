@@ -9,8 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ChatDAOtoDB extends AbstractDAOtoDB<Chat>{
+public class ChatDAOtoDB extends AbstractDAOtoDB<Chat> {
 
     @Override
     public void put(Chat chat) {
@@ -108,11 +109,12 @@ public class ChatDAOtoDB extends AbstractDAOtoDB<Chat>{
 
     }
 
-    public ArrayList<String> getAllMessagesByLodin(String toLogin, String fromLogin) {
 
-        ArrayList<String> messages = new ArrayList<>();
+    public HashMap<Long, Chat> getChatByLogins(String fromLogin, String toLogin){
 
-        String sql = "SELECT message FROM public.chat WHERE tologin='" + toLogin + "' and fromlogin='" + fromLogin + "' ORDER BY time ASC";
+        HashMap<Long, Chat> hashMap = new HashMap<>();
+
+        String sql = "SELECT * FROM public.chat WHERE tologin='" + toLogin + "' and fromlogin='" + fromLogin + "' ORDER BY time ASC";
 
         try (
                 Connection connection = ConnectionToDB.getConnection();
@@ -121,17 +123,28 @@ public class ChatDAOtoDB extends AbstractDAOtoDB<Chat>{
         ) {
             while (rSet.next()) {
 
-                messages.add(rSet.getString(1));
+                Long time = rSet.getLong("time");
+                String fromLoginDB = rSet.getString("fromlogin");
+                String toLoginDB = rSet.getString("tologin");
+                String message = rSet.getString("message");
+                Integer chatId = rSet.getInt("chatid");
+
+                Chat chat = new Chat(toLoginDB, fromLoginDB);
+                chat.setMessage(message);
+                chat.setTime(time);
+                chat.setChatId(chatId);
+
+                hashMap.put(time, chat);
 
             }
 
-            return messages;
+            return hashMap;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-
         return null;
+
     }
 }

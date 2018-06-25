@@ -49,6 +49,11 @@ public class UserServlet extends HttpServlet {
 
 
         Cookie[] cookies = req.getCookies();
+        for (Cookie c : cookies) {
+            System.out.println("Name: " + c.getName());
+            System.out.println("Value: " + c.getValue());
+        }
+
         String userLogin = new GetLoginFromCookie().getLogin(cookies, "login");
 
         if (iterator.hasNext()){

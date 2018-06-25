@@ -76,8 +76,11 @@ public class ChatServlet extends HttpServlet {
         User userTo = userDAOtoDB.get(chat.getToLogin());
         User userFrom = userDAOtoDB.get(chat.getFromLogin());
 
-        ArrayList<String> messageTo = chatDAOtoDB.getAllMessagesByLodin(chat.getFromLogin(), chat.getToLogin());
-        ArrayList<String> messageFrom = chatDAOtoDB.getAllMessagesByLodin(chat.getToLogin(), chat.getFromLogin());
+        TreeMap<Long, Chat> map = new TreeMap<>();
+
+        HashMap<Long, Chat> messageFrom = chatDAOtoDB.getChatByLogins(chat.getFromLogin(), chat.getToLogin());
+        HashMap<Long, Chat> messageTo = chatDAOtoDB.getChatByLogins(chat.getToLogin(), chat.getFromLogin());
+
 
         if (messageTo.size() == 0) {
 
@@ -87,25 +90,28 @@ public class ChatServlet extends HttpServlet {
             Liked liked = new Liked(userFrom.getId(), chatTo.getChatId(), chatTo.getFromLogin());
             likedDAOtoDB.put(liked);
 
-            messageTo.add(chatTo.getMessage());
+            messageTo.put(chatTo.getTime(), chatTo);
+
+        }
+
+        for (Long time : messageFrom.keySet()) {
+
+            map.put(time, messageFrom.get(time));
+
+        }
+
+        for (Long time : messageTo.keySet()) {
+
+            map.put(time, messageTo.get(time));
 
         }
 
         Map<String, Object> model = new HashMap<>();
         model.put("chatName", chat.getToLogin());
-        model.put("mes1", messageTo.get(0));
-
-        model.put("mes2", messageFrom.get(0));
-        model.put("date1", beautyTime(chat.getTime()));
+        model.put("chatMap", map);
         model.put("chatId", chatId);
         model.put("loginTo", chat.getToLogin());
         model.put("loginFrom", chat.getFromLogin());
-        if (messageFrom.size() > 1){
-            model.put("mes3", messageFrom.get(1));
-            model.put("date2", beautyTime(chat.getTime()));
-        } else {
-            model.put("mes3", "Hi!");
-        }
 
 
         Template template = new TemplateConfig().getConfig("chat.html");
