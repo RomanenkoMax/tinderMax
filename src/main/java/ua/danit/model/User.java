@@ -3,18 +3,26 @@ package ua.danit.model;
 import java.util.UUID;
 
 public class User {
-    private String name;
-    private  String photo;
-    private Integer id;
+
+    private int id;
     private String login;
     private String password;
+    private  String photo;
+    private Boolean liked;
 
-    public User(String name, String photo, String login, String password) {
-        this.name = name;
-        this.photo = photo;
-        this.id = genereateId();
+    public User(String login, String password, String photo) {
+
         this.login = login;
         this.password = password;
+        this.photo = photo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -33,23 +41,6 @@ public class User {
         this.password = password;
     }
 
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id){
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPhoto() {
         return photo;
     }
@@ -58,11 +49,11 @@ public class User {
         this.photo = photo;
     }
 
-    private Integer genereateId() {
-        UUID uniqueID = UUID.randomUUID();
-        String s = uniqueID.toString().replaceAll("[^0-9]", "");
-        return Integer.parseInt(s.substring(0, 8));
+    public Boolean getLiked() {
+        return liked;
     }
 
-
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
 }

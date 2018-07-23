@@ -49,17 +49,17 @@ public class LoginServlet extends HttpServlet {
         String userLogin = req.getParameter("login");
         String userPass = req.getParameter("password");
 
-        User user = userDAOtoDB.get(userLogin);
+        User user = userDAOtoDB.getUserByLoginAndPassword(userLogin, userPass);
 
-        if (user != null) {
+        if (user == null) {
+            resp.getWriter().write("Wrong credentials");
+        } else {
+            Cookie cookie = new Cookie("id", String.valueOf(user.getId()));
+            resp.addCookie(cookie);
 
-            if (user.getPassword().equals(userPass)) {
-                Cookie cookie = new Cookie("login", userLogin);
-                cookie.setMaxAge(120);
-                resp.addCookie(cookie);
-            }
+            userDAOtoDB.setLiked(user.getId(), false);
+
+            resp.sendRedirect("/user");
         }
-
-        resp.sendRedirect("/user");
     }
 }

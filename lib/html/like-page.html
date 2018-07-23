@@ -23,16 +23,16 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 col-lg-12 col-md-12 text-center">
-                    <img src=${photo} alt="" class="mx-auto rounded-circle img-fluid">
+                    <img src="${photo}" alt="" class="mx-auto rounded-circle img-fluid">
                     <h3 class="mb-0 text-truncated">${name}</h3>
                     <br>
                 </div>
 
                 <div class="col-12 col-lg-6">
                     <form action="/user" method="post">
-                        <input type="hidden" name="login" value="${login}">
-                        <input type="hidden" name="myLogin" value="${myLogin}">
-                        <button class="btn btn-outline-danger btn-block" name="like" value="no"><span
+                        <input type="hidden" name="id" value="${id}">
+                        <input type="hidden" name="myId" value="${myId}">
+                        <button class="btn btn-outline-danger btn-block" name="choice" value="no"><span
                                 class="fa fa-times"></span> Dislike
                         </button>
 
@@ -40,9 +40,9 @@
                 </div>
                 <div class="col-12 col-lg-6">
                     <form action="/user" method="post">
-                        <input type="hidden" name="login" value="${login}">
-                        <input type="hidden" name="myLogin" value="${myLogin}">
-                        <button class="btn btn-outline-success btn-block" name="like" value="yes"><span
+                        <input type="hidden" name="id" value="${id}">
+                        <input type="hidden" name="myId" value="${myId}">
+                        <button class="btn btn-outline-success btn-block" name="choice" value="yes"><span
                                 class="fa fa-heart"></span> Like
                     </button>
                     </form>

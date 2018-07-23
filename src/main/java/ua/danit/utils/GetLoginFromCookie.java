@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 
 public class GetLoginFromCookie {
 
-    public String getLogin(Cookie[] cookies, String name){
+    public String getByName(Cookie[] cookies, String name){
         for (Cookie c : cookies) {
             if (c.getName().equals(name)){
                 return c.getValue();

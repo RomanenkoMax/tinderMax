@@ -2,22 +2,19 @@ package ua.danit.controller;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.apache.commons.io.FileUtils;
 import ua.danit.dao.ChatDAOtoDB;
-import ua.danit.dao.LikedDAOtoDB;
 import ua.danit.dao.UserDAOtoDB;
 import ua.danit.model.Chat;
-import ua.danit.model.Liked;
 import ua.danit.model.User;
+import ua.danit.utils.GetLoginFromCookie;
 import ua.danit.utils.TemplateConfig;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -26,12 +23,10 @@ import java.util.*;
 public class ChatServlet extends HttpServlet {
 
     UserDAOtoDB userDAOtoDB;
-    LikedDAOtoDB likedDAOtoDB;
     ChatDAOtoDB chatDAOtoDB;
 
-    public ChatServlet(UserDAOtoDB userDAOtoDB, LikedDAOtoDB likedDAOtoDB, ChatDAOtoDB chatDAOtoDB) {
+    public ChatServlet(UserDAOtoDB userDAOtoDB, ChatDAOtoDB chatDAOtoDB) {
         this.userDAOtoDB = userDAOtoDB;
-        this.likedDAOtoDB = likedDAOtoDB;
         this.chatDAOtoDB = chatDAOtoDB;
     }
 
@@ -57,9 +52,9 @@ public class ChatServlet extends HttpServlet {
         }
     }
 
-    private String beautyTime(Long cartTime) {
+    private String beautyTime(Long time) {
 
-        Date date = new Date(cartTime);
+        Date date = new Date(time);
 
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH.mm");
 
@@ -70,25 +65,28 @@ public class ChatServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Integer chatId = getChatId(req.getPathInfo());
+        String toid = String.valueOf(getChatId(req.getPathInfo()));
 
-        Chat chat = chatDAOtoDB.get(chatId);
-        User userTo = userDAOtoDB.get(chat.getToLogin());
-        User userFrom = userDAOtoDB.get(chat.getFromLogin());
+        Cookie[] cookies = req.getCookies();
+
+        String fromid = new GetLoginFromCookie().getByName(cookies, "id");
+
+
+        User userTo = userDAOtoDB.getById(Integer.parseInt(toid));
+        User userFrom = userDAOtoDB.getById(Integer.parseInt(fromid));
 
         TreeMap<Long, Chat> map = new TreeMap<>();
+        Map<String, Chat> map1 = new LinkedHashMap<>();
 
-        HashMap<Long, Chat> messageFrom = chatDAOtoDB.getChatByLogins(chat.getFromLogin(), chat.getToLogin());
-        HashMap<Long, Chat> messageTo = chatDAOtoDB.getChatByLogins(chat.getToLogin(), chat.getFromLogin());
+
+        HashMap<Long, Chat> messageFrom = chatDAOtoDB.getChatByLogins(fromid, toid);
+        HashMap<Long, Chat> messageTo = chatDAOtoDB.getChatByLogins(toid, fromid);
 
 
         if (messageTo.size() == 0) {
 
-            Chat chatTo = new Chat(chat.getFromLogin(), chat.getToLogin());
+            Chat chatTo = new Chat(fromid, toid);
             chatDAOtoDB.put(chatTo);
-
-            Liked liked = new Liked(userFrom.getId(), chatTo.getChatId(), chatTo.getFromLogin());
-            likedDAOtoDB.put(liked);
 
             messageTo.put(chatTo.getTime(), chatTo);
 
@@ -106,12 +104,16 @@ public class ChatServlet extends HttpServlet {
 
         }
 
+
+
+        
+
         Map<String, Object> model = new HashMap<>();
-        model.put("chatName", chat.getToLogin());
+        model.put("chatName", userTo.getLogin());
         model.put("chatMap", map);
-        model.put("chatId", chatId);
-        model.put("loginTo", chat.getToLogin());
-        model.put("loginFrom", chat.getFromLogin());
+        model.put("chatId", toid);
+        model.put("loginTo", toid);
+        model.put("loginFrom", fromid);
 
 
         Template template = new TemplateConfig().getConfig("chat.html");
@@ -141,10 +143,6 @@ public class ChatServlet extends HttpServlet {
         chat.setMessage(message);
 
         chatDAOtoDB.put(chat);
-
-        Liked liked = new Liked(userDAOtoDB.get(loginTo).getId(), chat.getChatId(), loginFrom);
-
-        likedDAOtoDB.put(liked);
 
         doGet(req, resp);
     }

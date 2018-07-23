@@ -51,8 +51,9 @@
                         <#if v.fromLogin == "${loginFrom}">
                            <li class="send-msg float-right mb-2">
                                <p class="pt-1 pb-1 pl-2 pr-2 m-0 rounded">
-                                   ${v.message}
+                                   ${v.message}<br>
                                </p>
+                               <span class="receive-msg-time">${v.time}</span>
                            </li>
                         <#else>
                         <li class="receive-msg float-left mb-2">

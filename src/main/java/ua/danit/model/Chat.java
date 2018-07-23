@@ -1,29 +1,24 @@
 package ua.danit.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class Chat {
 
-    private Integer chatId;
     private Long time;
     private String message;
     private String toLogin;
     private String fromLogin;
+    private String normalTime;
 
     public Chat(String toLogin, String fromLogin) {
-        this.chatId = generateChatId();
+
         this.time = System.currentTimeMillis();
         this.message = "hi bebe, nice to speak with you";
         this.toLogin = toLogin;
         this.fromLogin = fromLogin;
-    }
-
-    public Integer getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Integer chatId) {
-        this.chatId = chatId;
+        this.normalTime = beautyTime(time);
     }
 
     public Long getTime() {
@@ -63,5 +58,12 @@ public class Chat {
         String s = uniqueID.toString().replaceAll("[^0-9]", "");
         return Integer.parseInt(s.substring(0, 8));
     }
+    private String beautyTime(Long time) {
 
+        Date date = new Date(time);
+
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH.mm");
+
+        return format.format(date);
+    }
 }

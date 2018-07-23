@@ -25,7 +25,7 @@ public class LoginFilter implements Filter {
 
         if (cookies != null){
 
-            if (userDAOtoDB.get(getLoginFromCookie.getLogin(cookies, "login")) == null){
+            if (userDAOtoDB.getById(Integer.parseInt(getLoginFromCookie.getByName(cookies, "id"))) == null){
                 resp.sendRedirect("/login");
             } else {
                 chain.doFilter(req, resp);

@@ -20,13 +20,11 @@ import java.util.*;
 public class LikedServlet extends HttpServlet {
 
     private UserDAOtoDB userDAOtoDB;
-    private LikedDAOtoDB likedDAOtoDB;
     private ChatDAOtoDB chatDAOtoDB;
 
 
-    public LikedServlet(UserDAOtoDB userDAOtoDB, LikedDAOtoDB likedDAOtoDB, ChatDAOtoDB chatDAOtoDB) {
+    public LikedServlet(UserDAOtoDB userDAOtoDB, ChatDAOtoDB chatDAOtoDB) {
         this.userDAOtoDB = userDAOtoDB;
-        this.likedDAOtoDB = likedDAOtoDB;
         this.chatDAOtoDB = chatDAOtoDB;
 
     }
@@ -35,17 +33,14 @@ public class LikedServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         Cookie[] cookies = req.getCookies();
-        String login = new GetLoginFromCookie().getLogin(cookies, "login");
-        List<Integer> likeds = likedDAOtoDB.getAllUserIdByLogin(login);
-        HashMap<Integer, User> users = new HashMap<>();
+        String login = new GetLoginFromCookie().getByName(cookies, "id");
 
-        for (Integer liked : likeds) {
-            users.put(likedDAOtoDB.getChatIdByUserId(userDAOtoDB.getById(liked).getId()), userDAOtoDB.getById(liked));
-        }
+
+        List<User> likedUsers = userDAOtoDB.getLikedUsers();
 
         Map<String, Object> model = new HashMap<>();
 
-        model.put("users", users);
+        model.put("users", likedUsers);
 
         resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
 

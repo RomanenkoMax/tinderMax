@@ -12,9 +12,9 @@ import java.sql.SQLException;
 
 public class ConnectionToDB
 {
-	private static final String DB_URL = "jdbc:postgresql://localhost:5432/tinder";
-	private static final String USERNAME = "postgres";
-	private static final String USER_PASS = "Partizan1979";
+	private static final String DB_URL = "jdbc:mysql://danit.cukm9c6zpjo8.us-west-2.rds.amazonaws.com:3306/fs5";
+	private static final String USERNAME = "fs5_user";
+	private static final String USER_PASS = "bArceloNa";
 
 	/**
 	 *
