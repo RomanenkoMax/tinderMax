@@ -79,7 +79,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ua.danit.AppRunner</mainClass>
+                            <mainClass>ua.danit.ServerApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
